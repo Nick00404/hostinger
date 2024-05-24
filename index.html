@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horizontal Card Scrolling</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            display: flex;
+            align-items: center;
+        }
+
+        .cards-container {
+            display: flex;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            width: 500px;
+            height: 500px; /* Adjust as needed */
+        }
+
+        .card {
+            min-width: 300px;
+            height: 400px;
+            margin: 10px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .scroll-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 20px;
+            user-select: none;
+        }
+
+        .scroll-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="scroll-btn" id="scroll-left">&#9664;</button>
+        <div class="cards-container" id="cards-container">
+            <div class="card">Card 1</div>
+            <div class="card">Card 2</div>
+            <div class="card">Card 3</div>
+            <div class="card">Card 4</div>
+            <div class="card">Card 5</div>
+            <!-- Add more cards as needed -->
+        </div>
+        <button class="scroll-btn" id="scroll-right">&#9654;</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const scrollLeftButton = document.getElementById('scroll-left');
+            const scrollRightButton = document.getElementById('scroll-right');
+            const cardsContainer = document.getElementById('cards-container');
+
+            const scrollAmount = 300; // Adjust as needed
+
+            scrollLeftButton.addEventListener('click', () => {
+                cardsContainer.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+            });
+
+            scrollRightButton.addEventListener('click', () => {
+                cardsContainer.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            });
+
+            // Optionally, you can add logic to disable the buttons when the start/end of the container is reached
+            cardsContainer.addEventListener('scroll', () => {
+                if (cardsContainer.scrollLeft === 0) {
+                    scrollLeftButton.disabled = true;
+                } else {
+                    scrollLeftButton.disabled = false;
+                }
+
+                if (cardsContainer.scrollWidth - cardsContainer.clientWidth === cardsContainer.scrollLeft) {
+                    scrollRightButton.disabled = true;
+                } else {
+                    scrollRightButton.disabled = false;
+                }
+            });
+
+            // Initial check to disable the scroll buttons if necessary
+            if (cardsContainer.scrollLeft === 0) {
+                scrollLeftButton.disabled = true;
+            }
+            if (cardsContainer.scrollWidth <= cardsContainer.clientWidth) {
+                scrollRightButton.disabled = true;
+            }
+        });
+    </script>
+</body>
+</html>
+
